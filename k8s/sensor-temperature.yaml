@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensor-temperature
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sensor-temperature
+  template:
+    metadata:
+      labels:
+        app: sensor-temperature
+        component: sensor
+    spec:
+      containers:
+        - name: sensor
+          image: house-sensor:latest
+          imagePullPolicy: Never
+          env:
+            - name: SENSOR_TYPE
+              value: temperature
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sensor-temperature-svc
+spec:
+  selector:
+    app: sensor-temperature
+  ports:
+    - port: 8080
+      targetPort: 8080
