@@ -40,7 +40,55 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             app_active_requests.dec()
 
 
+def _get_cpu_limit_cores() -> float:
+    """Detect cgroup CPU limit (works inside K8s containers).
+    Returns the CPU allocation in cores (e.g. 500m → 0.5)."""
+    # cgroup v2
+    try:
+        with open("/sys/fs/cgroup/cpu.max") as f:
+            parts = f.read().strip().split()
+            if parts[0] != "max":
+                return int(parts[0]) / int(parts[1])
+    except (FileNotFoundError, ValueError, IndexError):
+        pass
+    # cgroup v1
+    try:
+        with open("/sys/fs/cgroup/cpu/cpu.cfs_quota_us") as f:
+            quota = int(f.read().strip())
+        if quota != -1:
+            with open("/sys/fs/cgroup/cpu/cpu.cfs_period_us") as f:
+                period = int(f.read().strip())
+            return quota / period
+    except (FileNotFoundError, ValueError):
+        pass
+    # No limit detected — assume all system CPUs available
+    return float(os.cpu_count() or 1)
+
+
 def create_app(title: str = "Sensor Microservice") -> FastAPI:
+    # Background thread updates CPU/RAM gauges every 1s so /metrics is never
+    # blocked by in-flight stress requests and always returns fresh data.
+    _proc = psutil.Process(os.getpid())
+    # Prime the per-process CPU tracker (first call always returns 0.0)
+    _proc.cpu_percent()
+    _cpu_limit = _get_cpu_limit_cores()
+
+    def _metrics_updater() -> None:
+        while not _shutdown_event.is_set():
+            try:
+                raw = _proc.cpu_percent()
+                # Normalize: raw is % of one core; cpu_limit is in cores.
+                # e.g. raw=50%, limit=0.5 cores → 50/(0.5*100)*100 = 100%
+                normalized = min(100.0, raw / (_cpu_limit * 100) * 100)
+                app_cpu_percent.set(normalized)
+                app_ram_bytes.set(_proc.memory_info().rss)
+            except Exception:
+                pass
+            _shutdown_event.wait(timeout=1.0)
+
+    _metrics_thread = threading.Thread(target=_metrics_updater, daemon=True, name="metrics-updater")
+    _metrics_thread.start()
+
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         yield
@@ -54,9 +102,6 @@ def create_app(title: str = "Sensor Microservice") -> FastAPI:
 
     @app.get("/metrics")
     def metrics():
-        proc = psutil.Process(os.getpid())
-        app_cpu_percent.set(psutil.cpu_percent(interval=0.1))
-        app_ram_bytes.set(proc.memory_info().rss)
         return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
     @app.post("/stress")

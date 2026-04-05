@@ -54,18 +54,17 @@ def sync_pods_loop(
 
     while True:
         try:
-            all_ips: list[str] = []
+            total = 0
 
             for label in app_labels:
                 ips = _get_running_pod_ips(core_api, label, namespace)
                 lb.update_pods_by_label(label, ips)
-                all_ips.extend(ips)
+                total += len(ips)
                 logger.debug("[pod_sync] %s → %d pod(s): %s", label, len(ips), ips)
 
-            lb.update_pods(all_ips)
             logger.info(
                 "[pod_sync] Synced %d total pod(s) across %d label(s)",
-                len(all_ips),
+                total,
                 len(app_labels),
             )
 

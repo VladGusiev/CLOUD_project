@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scaler
+  labels:
+    app: scaler
+    component: control-plane
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scaler
+  template:
+    metadata:
+      labels:
+        app: scaler
+        component: control-plane
+    spec:
+      serviceAccountName: scaler-sa
+      containers:
+        - name: scaler
+          image: house-scaler:latest
+          imagePullPolicy: Never
+          env:
+            - name: APP_LABELS
+              value: "sensor-temperature,sensor-humidity,sensor-energy,sensor-air-quality"
+            - name: K8S_NAMESPACE
+              value: "default"
+            - name: SCALE_UP_THRESHOLD
+              value: "70"
+            - name: SCALE_DOWN_THRESHOLD
+              value: "30"
+            - name: MIN_REPLICAS
+              value: "1"
+            - name: MAX_REPLICAS
+              value: "5"
+            - name: COOLDOWN_SECONDS
+              value: "45"
+            - name: EVAL_INTERVAL
+              value: "10"
+            - name: METRIC_WINDOW_SIZE
+              value: "3"
+            - name: LOG_LEVEL
+              value: "INFO"
+          ports:
+            - containerPort: 8081
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scaler-svc
+spec:
+  selector:
+    app: scaler
+  ports:
+    - port: 8081
+      targetPort: 8081

@@ -1,397 +1,399 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Smart house dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              panel: "#0f172a",
-              card: "#111827",
-              border: "#334155",
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        panel: "#0f172a",
+                        card: "#111827",
+                        border: "#334155",
+                    },
+                },
             },
-          },
-        },
-      };
+        };
     </script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  </head>
-  <body class="min-h-screen bg-slate-950 text-slate-100">
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-100">
     <div id="app" class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <header
-        class="mb-6 rounded-xl border border-border bg-panel/80 p-4 backdrop-blur-sm"
-      >
-        <div
-          class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
-        >
-          <h1 class="text-xl font-semibold tracking-wide">
-            Smart house dashboard
-          </h1>
-          <div class="flex flex-wrap items-center gap-4 text-sm text-slate-300">
-            <div class="flex items-center gap-2">
-              <span
-                class="h-2.5 w-2.5 rounded-full"
-                :class="healthy ? 'bg-emerald-400' : 'bg-rose-400'"
-              ></span>
-              <span>{{ healthy ? 'Connected' : 'Error' }}</span>
+        <header class="mb-6 rounded-xl border border-border bg-panel/80 p-4 backdrop-blur-sm">
+            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <h1 class="text-xl font-semibold tracking-wide">
+                    Smart house dashboard
+                </h1>
+                <div class="flex flex-wrap items-center gap-4 text-sm text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <span class="h-2.5 w-2.5 rounded-full"
+                            :class="healthy ? 'bg-emerald-400' : 'bg-rose-400'"></span>
+                        <span>{{ healthy ? 'Connected' : 'Error' }}</span>
+                    </div>
+                    <div>
+                        Pods:
+                        <span class="font-medium text-slate-100">{{ totalPods }}</span>
+                    </div>
+                    <div>
+                        Updated:
+                        <span class="font-medium text-slate-100">{{ lastUpdate }}</span>
+                    </div>
+                </div>
             </div>
-            <div>
-              Pods:
-              <span class="font-medium text-slate-100">{{ totalPods }}</span>
-            </div>
-            <div>
-              Updated:
-              <span class="font-medium text-slate-100">{{ lastUpdate }}</span>
-            </div>
-          </div>
-        </div>
-        <p v-if="errorMessage" class="mt-3 text-xs text-rose-300">
-          {{ errorMessage }}
-        </p>
-      </header>
+            <p v-if="errorMessage" class="mt-3 text-xs text-rose-300">
+                {{ errorMessage }}
+            </p>
+        </header>
 
-      <main class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <article
-          v-for="sensor in sensorCards"
-          :key="sensor.key"
-          class="rounded-xl border border-border bg-card p-4 shadow-lg shadow-slate-900/20"
-        >
-          <div class="mb-4 flex items-center justify-between">
-            <h2 class="text-lg font-medium text-slate-100">
-              {{ sensor.label }}
-            </h2>
-            <span
-              class="rounded-full border border-border bg-slate-900 px-3 py-1 text-xs text-slate-300"
-            >
-              {{ sensor.pods }} pods
-            </span>
-          </div>
+        <main class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <article v-for="sensor in sensorCards" :key="sensor.key"
+                class="rounded-xl border border-border bg-card p-4 shadow-lg shadow-slate-900/20">
+                <div class="mb-4 flex items-center justify-between">
+                    <h2 class="text-lg font-medium text-slate-100">
+                        {{ sensor.label }}
+                    </h2>
+                    <span class="rounded-full border border-border bg-slate-900 px-3 py-1 text-xs text-slate-300">
+                        {{ sensor.pods }} pods
+                    </span>
+                </div>
 
-          <div v-if="sensor.key !== 'air_quality'" class="mb-4">
-            <div
-              class="text-4xl font-bold leading-none"
-              :class="readingClass(sensor.status)"
-            >
-              {{ formatNumber(sensor.value, sensor.decimals) }}
-            </div>
-            <div class="mt-2 text-sm uppercase tracking-widest text-slate-400">
-              {{ sensor.unit }}
-            </div>
-          </div>
+                <div v-if="sensor.key !== 'air_quality'" class="mb-4">
+                    <div class="text-4xl font-bold leading-none" :class="readingClass(sensor.status)">
+                        {{ formatNumber(sensor.value, sensor.decimals) }}
+                    </div>
+                    <div class="mt-2 text-sm uppercase tracking-widest text-slate-400">
+                        {{ sensor.unit }}
+                    </div>
+                </div>
 
-          <div v-else class="mb-4 space-y-3">
-            <div>
-              <div
-                class="text-4xl font-bold leading-none"
-                :class="readingClass(sensor.status)"
-              >
-                {{ formatNumber(sensor.co2, 0) }}
-              </div>
-              <div
-                class="mt-2 text-sm uppercase tracking-widest text-slate-400"
-              >
-                PPM CO2
-              </div>
-            </div>
-            <div>
-              <div class="text-2xl font-semibold text-slate-300">
-                {{ formatNumber(sensor.pm25, 1) }}
-              </div>
-              <div
-                class="mt-1 text-xs uppercase tracking-widest text-slate-500"
-              >
-                UG/M3 PM2.5
-              </div>
-            </div>
-          </div>
+                <div v-else class="mb-4 space-y-3">
+                    <div>
+                        <div class="text-4xl font-bold leading-none" :class="readingClass(sensor.status)">
+                            {{ formatNumber(sensor.co2, 0) }}
+                        </div>
+                        <div class="mt-2 text-sm uppercase tracking-widest text-slate-400">
+                            PPM CO2
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-semibold text-slate-300">
+                            {{ formatNumber(sensor.pm25, 1) }}
+                        </div>
+                        <div class="mt-1 text-xs uppercase tracking-widest text-slate-500">
+                            UG/M3 PM2.5
+                        </div>
+                    </div>
+                </div>
 
-          <div class="border-t border-border pt-3">
-            <div
-              class="mb-2 inline-flex rounded-md px-2 py-1 text-xs font-semibold"
-              :class="statusPillClass(sensor.status)"
-            >
-              {{ statusLabel(sensor.status) }}
-            </div>
-            <div class="truncate text-xs text-slate-400">
-              {{ sensor.ips.length ? sensor.ips.join(' | ') : 'no pods' }}
-            </div>
-          </div>
-        </article>
-      </main>
+                <div class="border-t border-border pt-3">
+                    <div class="mb-2 inline-flex rounded-md px-2 py-1 text-xs font-semibold"
+                        :class="statusPillClass(sensor.status)">
+                        {{ statusLabel(sensor.status) }}
+                    </div>
+                    <div class="truncate text-xs text-slate-400">
+                        {{ sensor.ips.length ? sensor.ips.join(' | ') : 'no pods' }}
+                    </div>
+                </div>
+            </article>
+        </main>
 
-      <section
-        class="mt-6 overflow-hidden rounded-xl border border-border bg-card"
-      >
-        <div
-          class="border-b border-border px-4 py-3 text-sm font-semibold uppercase tracking-wider text-slate-300"
-        >
-          Running Pods
-        </div>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-border text-sm">
-            <thead
-              class="bg-slate-900/50 text-left text-xs uppercase tracking-wider text-slate-400"
-            >
-              <tr>
-                <th class="px-4 py-3">Sensor</th>
-                <th class="px-4 py-3">Pod Count</th>
-                <th class="px-4 py-3">Pod IPs</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-border text-slate-200">
-              <tr v-if="podRows.length === 0">
-                <td class="px-4 py-4 text-slate-400" colspan="3">
-                  No pods yet
-                </td>
-              </tr>
-              <tr v-for="row in podRows" :key="row.key">
-                <td class="px-4 py-3">{{ row.name }}</td>
-                <td class="px-4 py-3">{{ row.pods }}</td>
-                <td class="px-4 py-3 font-mono text-xs">
-                  {{ row.ips.length ? row.ips.join(', ') : '-' }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+        <section class="mt-6 overflow-hidden rounded-xl border border-border bg-card">
+            <div class="border-b border-border px-4 py-3 text-sm font-semibold uppercase tracking-wider text-slate-300">
+                Running Pods
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-border text-sm">
+                    <thead class="bg-slate-900/50 text-left text-xs uppercase tracking-wider text-slate-400">
+                        <tr>
+                            <th class="px-4 py-3">Sensor</th>
+                            <th class="px-4 py-3">Pod Count</th>
+                            <th class="px-4 py-3">Avg CPU</th>
+                            <th class="px-4 py-3">Pod IPs</th>
+                            <th class="px-4 py-3">Per-Pod CPU</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border text-slate-200">
+                        <tr v-if="podRows.length === 0">
+                            <td class="px-4 py-4 text-slate-400" colspan="5">
+                                No pods yet
+                            </td>
+                        </tr>
+                        <tr v-for="row in podRows" :key="row.key">
+                            <td class="px-4 py-3">{{ row.name }}</td>
+                            <td class="px-4 py-3">{{ row.pods }}</td>
+                            <td class="px-4 py-3 font-mono text-xs"
+                                :class="row.avgCpu >= 70 ? 'text-rose-300' : row.avgCpu >= 30 ? 'text-amber-300' : 'text-emerald-300'">
+                                {{ row.avgCpu !== null ? row.avgCpu + '%' : '-' }}
+                            </td>
+                            <td class="px-4 py-3 font-mono text-xs">
+                                {{ row.ips.length ? row.ips.join(', ') : '-' }}
+                            </td>
+                            <td class="px-4 py-3 font-mono text-xs">
+                                <span v-for="(pod, i) in row.perPodCpu" :key="pod.ip"
+                                    :class="pod.cpu >= 70 ? 'text-rose-300' : pod.cpu >= 30 ? 'text-amber-300' : 'text-emerald-300'">
+                                    {{ pod.ip.split('.').pop() }}:{{ pod.cpu }}%<span
+                                        v-if="i < row.perPodCpu.length - 1">, </span>
+                                </span>
+                                <span v-if="!row.perPodCpu.length" class="text-slate-400">-</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 
     <script>
-      const { createApp } = Vue;
+        const { createApp } = Vue;
 
-      createApp({
-        data() {
-          return {
-            healthy: false,
-            errorMessage: "",
-            lastUpdate: "never",
-            totalPods: 0,
-            refreshTimer: null,
-            sensors: {
-              temperature: {
-                key: "temperature",
-                label: "Temperature",
-                unit: "deg C",
-                value: null,
-                decimals: 1,
-                pods: 0,
-                ips: [],
-                status: "normal",
-              },
-              humidity: {
-                key: "humidity",
-                label: "Humidity",
-                unit: "%",
-                value: null,
-                decimals: 1,
-                pods: 0,
-                ips: [],
-                status: "normal",
-              },
-              energy: {
-                key: "energy",
-                label: "Energy",
-                unit: "kW",
-                value: null,
-                decimals: 2,
-                pods: 0,
-                ips: [],
-                status: "normal",
-              },
-              air_quality: {
-                key: "air_quality",
-                label: "Air Quality",
-                co2: null,
-                pm25: null,
-                pods: 0,
-                ips: [],
-                status: "normal",
-              },
+        createApp({
+            data() {
+                return {
+                    healthy: false,
+                    errorMessage: "",
+                    lastUpdate: "never",
+                    totalPods: 0,
+                    refreshTimer: null,
+                    sensors: {
+                        temperature: {
+                            key: "temperature",
+                            label: "Temperature",
+                            unit: "deg C",
+                            value: null,
+                            decimals: 1,
+                            pods: 0,
+                            ips: [],
+                            status: "normal",
+                        },
+                        humidity: {
+                            key: "humidity",
+                            label: "Humidity",
+                            unit: "%",
+                            value: null,
+                            decimals: 1,
+                            pods: 0,
+                            ips: [],
+                            status: "normal",
+                        },
+                        energy: {
+                            key: "energy",
+                            label: "Energy",
+                            unit: "kW",
+                            value: null,
+                            decimals: 2,
+                            pods: 0,
+                            ips: [],
+                            status: "normal",
+                        },
+                        air_quality: {
+                            key: "air_quality",
+                            label: "Air Quality",
+                            co2: null,
+                            pm25: null,
+                            pods: 0,
+                            ips: [],
+                            status: "normal",
+                        },
+                    },
+                    sensorOrder: ["temperature", "humidity", "energy", "air_quality"],
+                    podRows: [],
+                    thresholds: {
+                        temperature: { warn: 25, critical: 27 },
+                        humidity: { warn: 65, critical: 75 },
+                        energy: { warn: 10, critical: 13 },
+                        air_quality: { warn: 1000, critical: 1600 },
+                    },
+                    scalerData: {},
+                };
             },
-            sensorOrder: ["temperature", "humidity", "energy", "air_quality"],
-            podRows: [],
-            thresholds: {
-              temperature: { warn: 25, critical: 27 },
-              humidity: { warn: 65, critical: 75 },
-              energy: { warn: 10, critical: 13 },
-              air_quality: { warn: 1000, critical: 1600 },
+            computed: {
+                sensorCards() {
+                    return this.sensorOrder.map((key) => this.sensors[key]);
+                },
             },
-          };
-        },
-        computed: {
-          sensorCards() {
-            return this.sensorOrder.map((key) => this.sensors[key]);
-          },
-        },
-        methods: {
-          normalizeSensorKey(raw) {
-            return String(raw || "")
-              .replace(/^sensor[-_]/, "")
-              .replace(/-/g, "_");
-          },
-          toTitle(key) {
-            return key
-              .replace(/_/g, " ")
-              .replace(/\b\w/g, (c) => c.toUpperCase());
-          },
-          readingFor(payload, sensorKey) {
-            const altKey = "sensor-" + sensorKey.replace(/_/g, "-");
-            return payload[sensorKey] ?? payload[altKey] ?? null;
-          },
-          classify(sensor, value) {
-            const t = this.thresholds[sensor];
-            if (
-              !t ||
-              value === null ||
-              value === undefined ||
-              Number.isNaN(Number(value))
-            ) {
-              return "normal";
-            }
-            if (Number(value) >= t.critical) return "critical";
-            if (Number(value) >= t.warn) return "warning";
-            return "normal";
-          },
-          statusLabel(level) {
-            if (level === "critical") return "Critical";
-            if (level === "warning") return "Warning";
-            return "Normal";
-          },
-          statusPillClass(level) {
-            if (level === "critical") return "bg-rose-500/15 text-rose-300";
-            if (level === "warning") return "bg-amber-500/15 text-amber-300";
-            return "bg-emerald-500/15 text-emerald-300";
-          },
-          readingClass(level) {
-            if (level === "critical") return "text-rose-300";
-            if (level === "warning") return "text-amber-300";
-            return "text-sky-300";
-          },
-          formatNumber(value, decimals = 1) {
-            if (
-              value === null ||
-              value === undefined ||
-              Number.isNaN(Number(value))
-            ) {
-              return "-";
-            }
-            return Number(value).toFixed(decimals);
-          },
-          resetSensorsMeta() {
-            for (const key of this.sensorOrder) {
-              this.sensors[key].pods = 0;
-              this.sensors[key].ips = [];
-            }
-          },
-          applyStatus(statusPayload) {
-            this.totalPods = Number(statusPayload.total_pods || 0);
-            this.resetSensorsMeta();
+            methods: {
+                normalizeSensorKey(raw) {
+                    return String(raw || "")
+                        .replace(/^sensor[-_]/, "")
+                        .replace(/-/g, "_");
+                },
+                toTitle(key) {
+                    return key
+                        .replace(/_/g, " ")
+                        .replace(/\b\w/g, (c) => c.toUpperCase());
+                },
+                readingFor(payload, sensorKey) {
+                    const altKey = "sensor-" + sensorKey.replace(/_/g, "-");
+                    return payload[sensorKey] ?? payload[altKey] ?? null;
+                },
+                classify(sensor, value) {
+                    const t = this.thresholds[sensor];
+                    if (
+                        !t ||
+                        value === null ||
+                        value === undefined ||
+                        Number.isNaN(Number(value))
+                    ) {
+                        return "normal";
+                    }
+                    if (Number(value) >= t.critical) return "critical";
+                    if (Number(value) >= t.warn) return "warning";
+                    return "normal";
+                },
+                statusLabel(level) {
+                    if (level === "critical") return "Critical";
+                    if (level === "warning") return "Warning";
+                    return "Normal";
+                },
+                statusPillClass(level) {
+                    if (level === "critical") return "bg-rose-500/15 text-rose-300";
+                    if (level === "warning") return "bg-amber-500/15 text-amber-300";
+                    return "bg-emerald-500/15 text-emerald-300";
+                },
+                readingClass(level) {
+                    if (level === "critical") return "text-rose-300";
+                    if (level === "warning") return "text-amber-300";
+                    return "text-sky-300";
+                },
+                formatNumber(value, decimals = 1) {
+                    if (
+                        value === null ||
+                        value === undefined ||
+                        Number.isNaN(Number(value))
+                    ) {
+                        return "-";
+                    }
+                    return Number(value).toFixed(decimals);
+                },
+                resetSensorsMeta() {
+                    for (const key of this.sensorOrder) {
+                        this.sensors[key].pods = 0;
+                        this.sensors[key].ips = [];
+                    }
+                },
+                applyStatus(statusPayload) {
+                    this.totalPods = Number(statusPayload.total_pods || 0);
+                    this.resetSensorsMeta();
 
-            const rows = [];
-            for (const [rawKey, info] of Object.entries(
-              statusPayload.sensors || {},
-            )) {
-              const key = this.normalizeSensorKey(rawKey);
-              const pods = Number(info?.pods || 0);
-              const ips = Array.isArray(info?.ips) ? info.ips : [];
+                    const rows = [];
+                    for (const [rawKey, info] of Object.entries(
+                        statusPayload.sensors || {},
+                    )) {
+                        const key = this.normalizeSensorKey(rawKey);
+                        const pods = Number(info?.pods || 0);
+                        const ips = Array.isArray(info?.ips) ? info.ips : [];
 
-              if (this.sensors[key]) {
-                this.sensors[key].pods = pods;
-                this.sensors[key].ips = ips;
-              }
+                        if (this.sensors[key]) {
+                            this.sensors[key].pods = pods;
+                            this.sensors[key].ips = ips;
+                        }
 
-              rows.push({ key, name: this.toTitle(key), pods, ips });
-            }
+                        rows.push({ key, name: this.toTitle(key), pods, ips });
+                    }
 
-            rows.sort(
-              (a, b) =>
-                this.sensorOrder.indexOf(a.key) -
-                this.sensorOrder.indexOf(b.key),
-            );
-            this.podRows = rows;
-          },
-          applyReadings(readingsPayload) {
-            const temperature = this.readingFor(readingsPayload, "temperature");
-            if (temperature && this.sensors.temperature) {
-              const value = temperature.value;
-              this.sensors.temperature.value = value;
-              this.sensors.temperature.status = this.classify(
-                "temperature",
-                value,
-              );
-            }
+                    rows.sort(
+                        (a, b) =>
+                            this.sensorOrder.indexOf(a.key) -
+                            this.sensorOrder.indexOf(b.key),
+                    );
 
-            const humidity = this.readingFor(readingsPayload, "humidity");
-            if (humidity && this.sensors.humidity) {
-              const value = humidity.value;
-              this.sensors.humidity.value = value;
-              this.sensors.humidity.status = this.classify("humidity", value);
-            }
+                    for (const row of rows) {
+                        const label = "sensor-" + row.key.replace(/_/g, "-");
+                        const sd = this.scalerData[label];
+                        row.avgCpu = sd ? sd.smoothed_cpu : null;
+                        row.perPodCpu = sd && Array.isArray(sd.per_pod) ? sd.per_pod : [];
+                    }
 
-            const energy = this.readingFor(readingsPayload, "energy");
-            if (energy && this.sensors.energy) {
-              const value = energy.value;
-              this.sensors.energy.value = value;
-              this.sensors.energy.status = this.classify("energy", value);
-            }
+                    this.podRows = rows;
+                },
+                applyReadings(readingsPayload) {
+                    const temperature = this.readingFor(readingsPayload, "temperature");
+                    if (temperature && this.sensors.temperature) {
+                        const value = temperature.value;
+                        this.sensors.temperature.value = value;
+                        this.sensors.temperature.status = this.classify(
+                            "temperature",
+                            value,
+                        );
+                    }
 
-            const airQuality = this.readingFor(readingsPayload, "air_quality");
-            if (airQuality && this.sensors.air_quality) {
-              const co2 = airQuality.co2_ppm;
-              const pm25 = airQuality.pm25;
-              this.sensors.air_quality.co2 = co2;
-              this.sensors.air_quality.pm25 = pm25;
-              this.sensors.air_quality.status = this.classify(
-                "air_quality",
-                co2,
-              );
-            }
-          },
-          async refresh() {
-            try {
-              const [statusResp, readingsResp] = await Promise.all([
-                fetch("/api/status"),
-                fetch("/api/readings"),
-              ]);
+                    const humidity = this.readingFor(readingsPayload, "humidity");
+                    if (humidity && this.sensors.humidity) {
+                        const value = humidity.value;
+                        this.sensors.humidity.value = value;
+                        this.sensors.humidity.status = this.classify("humidity", value);
+                    }
 
-              if (!statusResp.ok)
-                throw new Error("/api/status returned " + statusResp.status);
-              if (!readingsResp.ok)
-                throw new Error(
-                  "/api/readings returned " + readingsResp.status,
-                );
+                    const energy = this.readingFor(readingsPayload, "energy");
+                    if (energy && this.sensors.energy) {
+                        const value = energy.value;
+                        this.sensors.energy.value = value;
+                        this.sensors.energy.status = this.classify("energy", value);
+                    }
 
-              const statusPayload = await statusResp.json();
-              const readingsPayload = await readingsResp.json();
+                    const airQuality = this.readingFor(readingsPayload, "air_quality");
+                    if (airQuality && this.sensors.air_quality) {
+                        const co2 = airQuality.co2_ppm;
+                        const pm25 = airQuality.pm25;
+                        this.sensors.air_quality.co2 = co2;
+                        this.sensors.air_quality.pm25 = pm25;
+                        this.sensors.air_quality.status = this.classify(
+                            "air_quality",
+                            co2,
+                        );
+                    }
+                },
+                async refresh() {
+                    try {
+                        const [statusResp, readingsResp, scalerResp] = await Promise.all([
+                            fetch("/api/status"),
+                            fetch("/api/readings"),
+                            fetch("/api/scaler-status"),
+                        ]);
 
-              this.applyStatus(statusPayload);
-              this.applyReadings(readingsPayload);
+                        if (!statusResp.ok)
+                            throw new Error("/api/status returned " + statusResp.status);
+                        if (!readingsResp.ok)
+                            throw new Error(
+                                "/api/readings returned " + readingsResp.status,
+                            );
 
-              this.healthy = true;
-              this.errorMessage = "";
-              this.lastUpdate = new Date().toLocaleTimeString();
-            } catch (err) {
-              this.healthy = false;
-              this.errorMessage = String(err);
-            }
-          },
-        },
-        mounted() {
-          this.refresh();
-          this.refreshTimer = setInterval(this.refresh, 5000);
-        },
-        beforeUnmount() {
-          if (this.refreshTimer) {
-            clearInterval(this.refreshTimer);
-            this.refreshTimer = null;
-          }
-        },
-      }).mount("#app");
+                        const statusPayload = await statusResp.json();
+                        const readingsPayload = await readingsResp.json();
+
+                        if (scalerResp.ok) {
+                            this.scalerData = await scalerResp.json();
+                        }
+
+                        this.applyStatus(statusPayload);
+                        this.applyReadings(readingsPayload);
+
+                        this.healthy = true;
+                        this.errorMessage = "";
+                        this.lastUpdate = new Date().toLocaleTimeString();
+                    } catch (err) {
+                        this.healthy = false;
+                        this.errorMessage = String(err);
+                    }
+                },
+            },
+            mounted() {
+                this.refresh();
+                this.refreshTimer = setInterval(this.refresh, 1000);
+            },
+            beforeUnmount() {
+                if (this.refreshTimer) {
+                    clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
+                }
+            },
+        }).mount("#app");
     </script>
-  </body>
+</body>
+
 </html>

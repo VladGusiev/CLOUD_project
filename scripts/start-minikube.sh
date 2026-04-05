@@ -30,26 +30,30 @@ cleanup_context() {
 }
 trap cleanup_context EXIT
 
-echo "[1/8] Recreate isolated Minikube profile: $PROFILE"
+echo "[1/9] Recreate isolated Minikube profile: $PROFILE"
 minikube delete -p "$PROFILE" >/dev/null 2>&1 || true
 minikube start -p "$PROFILE" --driver=docker --cpus="$CPUS" --memory="$MEMORY"
 
-echo "[2/8] Build sensor image inside Minikube"
+echo "[2/9] Build sensor image inside Minikube"
 minikube image build -p "$PROFILE" -t house-sensor:latest "$ROOT_DIR/microservice"
 
-echo "[3/8] Build load balancer image inside Minikube"
+echo "[3/9] Build load balancer image inside Minikube"
 minikube image build -p "$PROFILE" -t house-lb:latest "$ROOT_DIR/lb"
 
-echo "[4/8] Apply RBAC and manifests"
+echo "[4/9] Build scaler image inside Minikube"
+minikube image build -p "$PROFILE" -t house-scaler:latest "$ROOT_DIR/scaler"
+
+echo "[5/9] Apply RBAC and manifests"
 kubectl --context "$PROFILE" -n "$NAMESPACE" apply -f "$ROOT_DIR/k8s/rbac.yaml"
 kubectl --context "$PROFILE" -n "$NAMESPACE" apply \
   -f "$ROOT_DIR/k8s/sensor-temperature.yaml" \
   -f "$ROOT_DIR/k8s/sensor-humidity.yaml" \
   -f "$ROOT_DIR/k8s/sensor-energy.yaml" \
   -f "$ROOT_DIR/k8s/sensor-air-quality.yaml" \
-  -f "$ROOT_DIR/k8s/lb-deployment.yaml"
+  -f "$ROOT_DIR/k8s/lb-deployment.yaml" \
+  -f "$ROOT_DIR/k8s/scaler-deployment.yaml"
 
-echo "[5/8] Wait for deployments"
+echo "[6/9] Wait for deployments"
 kubectl --context "$PROFILE" -n "$NAMESPACE" wait \
   --for=condition=Available \
   --timeout=240s \
@@ -57,9 +61,10 @@ kubectl --context "$PROFILE" -n "$NAMESPACE" wait \
   deployment/sensor-humidity \
   deployment/sensor-energy \
   deployment/sensor-air-quality \
-  deployment/load-balancer
+  deployment/load-balancer \
+  deployment/scaler
 
-echo "[6/8] Restart local port-forward"
+echo "[7/9] Restart local port-forward"
 if [ -f "$PID_FILE" ]; then
   old_pid="$(cat "$PID_FILE" || true)"
   if [ -n "$old_pid" ] && kill -0 "$old_pid" >/dev/null 2>&1; then
@@ -80,8 +85,9 @@ if ! kill -0 "$(cat "$PID_FILE")" >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "[7/8] Verify API is reachable"
+echo "[8/9] Verify API is reachable"
 curl -fsS "http://127.0.0.1:$LOCAL_PORT/api/status" >/dev/null
 
-echo "[8/8] Ready"
+echo "[9/9] Ready"
 echo "Dashboard: http://127.0.0.1:$LOCAL_PORT/dashboard"
+echo "Scaler logs: kubectl --context $PROFILE logs -f deployment/scaler"

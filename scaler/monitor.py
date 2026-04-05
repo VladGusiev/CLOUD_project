@@ -46,9 +46,9 @@ async def scrape_pod(session: aiohttp.ClientSession, ip: str) -> dict | None:
         return None
 
 
-async def collect_metrics(k8s_client, app_labels: list[str]) -> dict:
+async def collect_metrics(k8s_client, app_label: str) -> dict:
     """
-    Scrape all running pods for the given app labels concurrently.
+    Scrape all running pods for a single deployment and return aggregated metrics.
 
     Returns:
         {
@@ -58,12 +58,10 @@ async def collect_metrics(k8s_client, app_labels: list[str]) -> dict:
             "per_pod": [{"ip": str, "cpu": float, "ram": float}, ...]
         }
     """
-    ips = []
-    for label in app_labels:
-        ips.extend(k8s_client.get_running_pod_ips(label))
+    ips = k8s_client.get_running_pod_ips(app_label)
 
     if not ips:
-        logger.warning("No running pods found for labels: %s", app_labels)
+        logger.warning("No running pods found for label: %s", app_label)
         return {"avg_cpu": 0.0, "avg_ram": 0.0, "pod_count": 0, "per_pod": []}
 
     async with aiohttp.ClientSession() as session:

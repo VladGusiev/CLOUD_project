@@ -21,3 +21,6 @@ class MetricWindow:
 
     def values(self) -> list[float]:
         return list(self._window)
+
+    def __len__(self) -> int:
+        return len(self._window)
