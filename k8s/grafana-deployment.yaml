@@ -1,0 +1,415 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource
+data:
+  datasource.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-svc:9090
+        uid: prometheus
+        isDefault: true
+        editable: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-provider
+data:
+  provider.yaml: |
+    apiVersion: 1
+    providers:
+      - name: default
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 10
+        options:
+          path: /var/lib/grafana/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-json
+data:
+  cloud-sensors.json: |
+    {
+    "title": "Cloud Sensors",
+    "uid": "cloud-sensors",
+    "schemaVersion": 39,
+    "version": 1,
+    "refresh": "5s",
+    "time": {
+    "from": "now-15m",
+    "to": "now"
+    },
+    "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "CPU % per Pod",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          },
+          "min": 0,
+          "max": 100,
+          "unit": "percent"
+        }
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "expr": "app_cpu_percent",
+          "legendFormat": "{{pod}} ({{app}})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Average CPU % per Deployment (Scaler View)",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          },
+          "min": 0,
+          "max": 100,
+          "unit": "percent"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scale-up threshold"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    8,
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scale-down threshold"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    8,
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "expr": "scaler_deployment_avg_cpu",
+          "legendFormat": "{{deployment}}",
+          "refId": "A"
+        },
+        {
+          "expr": "70",
+          "legendFormat": "Scale-up threshold",
+          "refId": "B"
+        },
+        {
+          "expr": "30",
+          "legendFormat": "Scale-down threshold",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "RAM per Pod (MB)",
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          },
+          "min": 0,
+          "unit": "decmbytes"
+        }
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "expr": "app_ram_bytes / 1024 / 1024",
+          "legendFormat": "{{pod}} ({{app}})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Request Rate per Pod (req/s)",
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          },
+          "min": 0,
+          "unit": "reqps"
+        }
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "expr": "rate(app_requests_total[30s])",
+          "legendFormat": "{{pod}} ({{app}}) status={{status}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Replica Count per Deployment",
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10
+          },
+          "min": 0,
+          "unit": "short"
+        }
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        }
+      },
+      "targets": [
+        {
+          "expr": "scaler_deployment_replicas",
+          "legendFormat": "{{deployment}}",
+          "refId": "A"
+        }
+      ]
+    }
+    ],
+    "templating": {
+    "list": [
+      {
+        "name": "DS_PROMETHEUS",
+        "type": "datasource",
+        "pluginId": "prometheus",
+        "hide": 2
+      }
+    ]
+    }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:10.3.1
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: Admin
+            - name: GF_AUTH_DISABLE_LOGIN_FORM
+              value: "true"
+            - name: GF_SECURITY_ALLOW_EMBEDDING
+              value: "true"
+          volumeMounts:
+            - name: datasource
+              mountPath: /etc/grafana/provisioning/datasources
+            - name: dashboard-provider
+              mountPath: /etc/grafana/provisioning/dashboards
+            - name: dashboard-json
+              mountPath: /var/lib/grafana/dashboards
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+      volumes:
+        - name: datasource
+          configMap:
+            name: grafana-datasource
+        - name: dashboard-provider
+          configMap:
+            name: grafana-dashboard-provider
+        - name: dashboard-json
+          configMap:
+            name: grafana-dashboard-json
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-svc
+spec:
+  type: NodePort
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30030
