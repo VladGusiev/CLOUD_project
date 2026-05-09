@@ -5,6 +5,8 @@ import threading
 
 import uvicorn
 from fastapi import FastAPI
+from fastapi.responses import Response
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
 from k8s_client import K8sScalerClient
 from scaler import ScalerConfig, ScalerManager
@@ -41,6 +43,10 @@ def _create_api(manager: ScalerManager) -> FastAPI:
     @api.get("/status")
     async def status():
         return manager.get_status()
+
+    @api.get("/metrics")
+    def metrics():
+        return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
     return api
 

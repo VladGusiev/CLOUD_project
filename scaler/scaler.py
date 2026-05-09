@@ -3,9 +3,21 @@ import logging
 import time
 from dataclasses import dataclass
 
+from prometheus_client import Gauge
+
 from k8s_client import K8sScalerClient
 from metrics_window import MetricWindow
 from monitor import collect_metrics
+
+_gauge_replicas = Gauge(
+    "scaler_deployment_replicas", "Current replica count per deployment", ["deployment"]
+)
+_gauge_avg_cpu = Gauge(
+    "scaler_deployment_avg_cpu", "Average CPU utilization percent per deployment", ["deployment"]
+)
+_gauge_avg_ram = Gauge(
+    "scaler_deployment_avg_ram", "Average RAM usage bytes per deployment", ["deployment"]
+)
 
 logger = logging.getLogger("scaler.scaler")
 
@@ -87,6 +99,10 @@ class ScalerManager:
         pod_cpus = [round(p["cpu"], 1) for p in per_pod]
 
         self._last_metrics[label] = metrics
+
+        _gauge_replicas.labels(deployment=label).set(pod_count)
+        _gauge_avg_cpu.labels(deployment=label).set(avg_cpu)
+        _gauge_avg_ram.labels(deployment=label).set(metrics.get("avg_ram", 0.0))
 
         window.add(avg_cpu)
         smoothed_cpu = window.average()

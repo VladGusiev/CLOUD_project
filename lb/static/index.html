@@ -1,398 +1,457 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smart house dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        panel: "#0f172a",
-                        card: "#111827",
-                        border: "#334155",
-                    },
-                },
-            },
-        };
-    </script>
+    <title>Cloud Sensors</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" />
+    <style>
+        body {
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+        }
+
+        .tab-active {
+            background: #3b82f6;
+            color: #fff;
+        }
+
+        .tab-inactive {
+            background: #1e293b;
+            color: #94a3b8;
+        }
+
+        .tab-inactive:hover {
+            background: #334155;
+            color: #e2e8f0;
+        }
+
+        .status-normal {
+            background: #166534;
+            color: #86efac;
+        }
+
+        .status-warning {
+            background: #713f12;
+            color: #fde68a;
+        }
+
+        .status-critical {
+            background: #7f1d1d;
+            color: #fca5a5;
+        }
+
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+        }
+
+        .progress-fill {
+            height: 6px;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        input[type=range] {
+            accent-color: #3b82f6;
+        }
+
+        input[type=number],
+        select {
+            background: #334155;
+            color: #e2e8f0;
+            border-color: #475569;
+        }
+
+        input[type=number]:focus,
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        input[type=number]:disabled,
+        select:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .log-box {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
-<body class="min-h-screen bg-slate-950 text-slate-100">
-    <div id="app" class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <header class="mb-6 rounded-xl border border-border bg-panel/80 p-4 backdrop-blur-sm">
-            <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <h1 class="text-xl font-semibold tracking-wide">
-                    Smart house dashboard
-                </h1>
-                <div class="flex flex-wrap items-center gap-4 text-sm text-slate-300">
-                    <div class="flex items-center gap-2">
-                        <span class="h-2.5 w-2.5 rounded-full"
-                            :class="healthy ? 'bg-emerald-400' : 'bg-rose-400'"></span>
-                        <span>{{ healthy ? 'Connected' : 'Error' }}</span>
-                    </div>
-                    <div>
-                        Pods:
-                        <span class="font-medium text-slate-100">{{ totalPods }}</span>
-                    </div>
-                    <div>
-                        Updated:
-                        <span class="font-medium text-slate-100">{{ lastUpdate }}</span>
+<body>
+    <div id="app" class="min-h-screen">
+
+        <!-- Header -->
+        <div class="px-6 py-4 flex items-center justify-between border-b border-slate-700">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl font-bold text-white">Cloud Sensors</span>
+                <span class="text-sm px-2 py-0.5 rounded-full"
+                    :class="connected ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'">
+                    {{ connected ? 'Live' : 'Offline' }}
+                </span>
+            </div>
+            <div class="flex gap-1 rounded-lg p-1" style="background:#0f172a">
+                <button class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    :class="tab === 'demo' ? 'tab-active' : 'tab-inactive'" @click="tab = 'demo'">Demo</button>
+                <button class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    :class="tab === 'stress' ? 'tab-active' : 'tab-inactive'" @click="tab = 'stress'">Stress
+                    Test</button>
+            </div>
+            <span class="text-xs text-slate-500">{{ lastUpdate }}</span>
+        </div>
+
+        <!-- ===== DEMO TAB ===== -->
+        <div v-if="tab === 'demo'" class="p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+                <div class="card rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-slate-400 text-xs uppercase tracking-widest">Temperature</p>
+                            <p class="text-4xl font-bold text-white mt-1">
+                                {{ readings.temperature !== null ? readings.temperature : '—' }}
+                                <span class="text-xl text-slate-400">°C</span>
+                            </p>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded-full font-semibold" :class="statusClass('temperature')">
+                            {{ statusLabel('temperature') }}
+                        </span>
                     </div>
                 </div>
+
+                <div class="card rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-slate-400 text-xs uppercase tracking-widest">Humidity</p>
+                            <p class="text-4xl font-bold text-white mt-1">
+                                {{ readings.humidity !== null ? readings.humidity : '—' }}
+                                <span class="text-xl text-slate-400">%</span>
+                            </p>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded-full font-semibold" :class="statusClass('humidity')">
+                            {{ statusLabel('humidity') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-slate-400 text-xs uppercase tracking-widest">Energy</p>
+                            <p class="text-4xl font-bold text-white mt-1">
+                                {{ readings.energy !== null ? readings.energy : '—' }}
+                                <span class="text-xl text-slate-400">kW</span>
+                            </p>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded-full font-semibold" :class="statusClass('energy')">
+                            {{ statusLabel('energy') }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card rounded-xl p-5">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <p class="text-slate-400 text-xs uppercase tracking-widest">Air Quality</p>
+                            <div class="mt-1">
+                                <p class="text-3xl font-bold text-white">
+                                    {{ readings.co2 !== null ? readings.co2 : '—' }}
+                                    <span class="text-base text-slate-400">ppm CO2</span>
+                                </p>
+                                <p class="text-xl font-semibold text-slate-300 mt-1">
+                                    {{ readings.pm25 !== null ? readings.pm25 : '—' }}
+                                    <span class="text-sm text-slate-400">ug/m3 PM2.5</span>
+                                </p>
+                            </div>
+                        </div>
+                        <span class="text-xs px-2 py-1 rounded-full font-semibold" :class="statusClass('air_quality')">
+                            {{ statusLabel('air_quality') }}
+                        </span>
+                    </div>
+                </div>
+
             </div>
-            <p v-if="errorMessage" class="mt-3 text-xs text-rose-300">
-                {{ errorMessage }}
+
+            <p class="text-center text-xs text-slate-600 mt-4">
+                Full metrics &amp; graphs:
+                <a :href="grafanaUrl" target="_blank" class="text-blue-400 hover:underline">Grafana dashboard</a>
+                (localhost:30030)
             </p>
-        </header>
+        </div>
 
-        <main class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <article v-for="sensor in sensorCards" :key="sensor.key"
-                class="rounded-xl border border-border bg-card p-4 shadow-lg shadow-slate-900/20">
-                <div class="mb-4 flex items-center justify-between">
-                    <h2 class="text-lg font-medium text-slate-100">
-                        {{ sensor.label }}
-                    </h2>
-                    <span class="rounded-full border border-border bg-slate-900 px-3 py-1 text-xs text-slate-300">
-                        {{ sensor.pods }} pods
-                    </span>
-                </div>
+        <!-- ===== STRESS TEST TAB ===== -->
+        <div v-if="tab === 'stress'" class="p-6 max-w-2xl mx-auto">
+            <div class="card rounded-xl p-6">
+                <h2 class="text-lg font-semibold text-white mb-1">Flood Stress Test</h2>
+                <p class="text-slate-400 text-sm mb-5">
+                    Sends continuous <code class="bg-slate-800 px-1 rounded">/sensor/reading</code> requests through the
+                    load balancer to spike CPU and trigger autoscaling. Watch replica counts rise in Grafana.
+                </p>
 
-                <div v-if="sensor.key !== 'air_quality'" class="mb-4">
-                    <div class="text-4xl font-bold leading-none" :class="readingClass(sensor.status)">
-                        {{ formatNumber(sensor.value, sensor.decimals) }}
-                    </div>
-                    <div class="mt-2 text-sm uppercase tracking-widest text-slate-400">
-                        {{ sensor.unit }}
-                    </div>
-                </div>
-
-                <div v-else class="mb-4 space-y-3">
+                <div class="space-y-4">
                     <div>
-                        <div class="text-4xl font-bold leading-none" :class="readingClass(sensor.status)">
-                            {{ formatNumber(sensor.co2, 0) }}
-                        </div>
-                        <div class="mt-2 text-sm uppercase tracking-widest text-slate-400">
-                            PPM CO2
-                        </div>
+                        <label class="block text-slate-400 text-xs uppercase tracking-widest mb-1">Target Sensor</label>
+                        <select v-model="stressTarget" :disabled="running"
+                            class="w-full bg-slate-700 border border-slate-600 text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+                            <option value="sensor-temperature">Temperature</option>
+                            <option value="sensor-humidity">Humidity</option>
+                            <option value="sensor-energy">Energy</option>
+                            <option value="sensor-air-quality">Air Quality</option>
+                        </select>
                     </div>
+
                     <div>
-                        <div class="text-2xl font-semibold text-slate-300">
-                            {{ formatNumber(sensor.pm25, 1) }}
+                        <label class="block text-slate-400 text-xs uppercase tracking-widest mb-1">
+                            Concurrent Workers: <span class="text-white font-semibold">{{ stressWorkers }}</span>
+                        </label>
+                        <input type="range" v-model.number="stressWorkers" :disabled="running" min="1" max="100"
+                            step="1" class="w-full" />
+                        <div class="flex justify-between text-xs text-slate-500 mt-0.5"><span>1</span><span>100</span>
                         </div>
-                        <div class="mt-1 text-xs uppercase tracking-widest text-slate-500">
-                            UG/M3 PM2.5
-                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-400 text-xs uppercase tracking-widest mb-1">Duration
+                            (seconds)</label>
+                        <input type="number" v-model.number="stressDuration" :disabled="running" min="5" max="300"
+                            class="w-full bg-slate-700 border border-slate-600 text-white placeholder-slate-400 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500" />
                     </div>
                 </div>
 
-                <div class="border-t border-border pt-3">
-                    <div class="mb-2 inline-flex rounded-md px-2 py-1 text-xs font-semibold"
-                        :class="statusPillClass(sensor.status)">
-                        {{ statusLabel(sensor.status) }}
+                <div class="flex gap-3 mt-6">
+                    <button v-if="!running" @click="startStress"
+                        class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 rounded-lg transition-colors">
+                        Start Flood
+                    </button>
+                    <button v-else @click="stopStress"
+                        class="flex-1 bg-red-700 hover:bg-red-600 text-white font-semibold py-2 rounded-lg transition-colors">
+                        Stop
+                    </button>
+                </div>
+
+                <div v-if="running" class="mt-4">
+                    <div class="flex justify-between text-xs text-slate-400 mb-1">
+                        <span>Elapsed: {{ stressElapsed }}s</span>
+                        <span>Remaining: {{ Math.max(0, stressDuration - stressElapsed) }}s</span>
                     </div>
-                    <div class="truncate text-xs text-slate-400">
-                        {{ sensor.ips.length ? sensor.ips.join(' | ') : 'no pods' }}
+                    <div class="progress-bar">
+                        <div class="progress-fill bg-blue-500"
+                            :style="{ width: Math.min(100, stressElapsed / stressDuration * 100) + '%' }"></div>
                     </div>
                 </div>
-            </article>
-        </main>
 
-        <section class="mt-6 overflow-hidden rounded-xl border border-border bg-card">
-            <div class="border-b border-border px-4 py-3 text-sm font-semibold uppercase tracking-wider text-slate-300">
-                Running Pods
+                <div class="grid grid-cols-3 gap-4 mt-5">
+                    <div class="bg-slate-800 rounded-lg p-3 text-center">
+                        <p class="text-slate-400 text-xs uppercase tracking-widest">Sent</p>
+                        <p class="text-2xl font-bold text-white">{{ stressSent }}</p>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-3 text-center">
+                        <p class="text-slate-400 text-xs uppercase tracking-widest">Errors</p>
+                        <p class="text-2xl font-bold" :class="stressErrors > 0 ? 'text-red-400' : 'text-white'">{{
+                            stressErrors }}</p>
+                    </div>
+                    <div class="bg-slate-800 rounded-lg p-3 text-center">
+                        <p class="text-slate-400 text-xs uppercase tracking-widest">Req/s</p>
+                        <p class="text-2xl font-bold text-green-400">{{ stressRps }}</p>
+                    </div>
+                </div>
+
+                <div class="log-box rounded-lg mt-5 p-3" ref="logBox">
+                    <div v-if="stressLog.length === 0" class="text-slate-600">Ready. Configure options above and press
+                        Start.</div>
+                    <div v-for="(line, i) in stressLog" :key="i"
+                        :class="line.type === 'error' ? 'text-red-400' : line.type === 'success' ? 'text-green-400' : 'text-slate-300'">
+                        {{ line.msg }}
+                    </div>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-border text-sm">
-                    <thead class="bg-slate-900/50 text-left text-xs uppercase tracking-wider text-slate-400">
-                        <tr>
-                            <th class="px-4 py-3">Sensor</th>
-                            <th class="px-4 py-3">Pod Count</th>
-                            <th class="px-4 py-3">Avg CPU</th>
-                            <th class="px-4 py-3">Pod IPs</th>
-                            <th class="px-4 py-3">Per-Pod CPU</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-border text-slate-200">
-                        <tr v-if="podRows.length === 0">
-                            <td class="px-4 py-4 text-slate-400" colspan="5">
-                                No pods yet
-                            </td>
-                        </tr>
-                        <tr v-for="row in podRows" :key="row.key">
-                            <td class="px-4 py-3">{{ row.name }}</td>
-                            <td class="px-4 py-3">{{ row.pods }}</td>
-                            <td class="px-4 py-3 font-mono text-xs"
-                                :class="row.avgCpu >= 70 ? 'text-rose-300' : row.avgCpu >= 30 ? 'text-amber-300' : 'text-emerald-300'">
-                                {{ row.avgCpu !== null ? row.avgCpu + '%' : '-' }}
-                            </td>
-                            <td class="px-4 py-3 font-mono text-xs">
-                                {{ row.ips.length ? row.ips.join(', ') : '-' }}
-                            </td>
-                            <td class="px-4 py-3 font-mono text-xs">
-                                <span v-for="(pod, i) in row.perPodCpu" :key="pod.ip"
-                                    :class="pod.cpu >= 70 ? 'text-rose-300' : pod.cpu >= 30 ? 'text-amber-300' : 'text-emerald-300'">
-                                    {{ pod.ip.split('.').pop() }}:{{ pod.cpu }}%<span
-                                        v-if="i < row.perPodCpu.length - 1">, </span>
-                                </span>
-                                <span v-if="!row.perPodCpu.length" class="text-slate-400">-</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        </div>
+
     </div>
-
     <script>
-        const { createApp } = Vue;
+        const { createApp, ref, onMounted, onUnmounted, nextTick } = Vue;
 
         createApp({
-            data() {
-                return {
-                    healthy: false,
-                    errorMessage: "",
-                    lastUpdate: "never",
-                    totalPods: 0,
-                    refreshTimer: null,
-                    sensors: {
-                        temperature: {
-                            key: "temperature",
-                            label: "Temperature",
-                            unit: "deg C",
-                            value: null,
-                            decimals: 1,
-                            pods: 0,
-                            ips: [],
-                            status: "normal",
-                        },
-                        humidity: {
-                            key: "humidity",
-                            label: "Humidity",
-                            unit: "%",
-                            value: null,
-                            decimals: 1,
-                            pods: 0,
-                            ips: [],
-                            status: "normal",
-                        },
-                        energy: {
-                            key: "energy",
-                            label: "Energy",
-                            unit: "kW",
-                            value: null,
-                            decimals: 2,
-                            pods: 0,
-                            ips: [],
-                            status: "normal",
-                        },
-                        air_quality: {
-                            key: "air_quality",
-                            label: "Air Quality",
-                            co2: null,
-                            pm25: null,
-                            pods: 0,
-                            ips: [],
-                            status: "normal",
-                        },
-                    },
-                    sensorOrder: ["temperature", "humidity", "energy", "air_quality"],
-                    podRows: [],
-                    thresholds: {
-                        temperature: { warn: 25, critical: 27 },
-                        humidity: { warn: 65, critical: 75 },
-                        energy: { warn: 10, critical: 13 },
-                        air_quality: { warn: 1000, critical: 1600 },
-                    },
-                    scalerData: {},
-                };
-            },
-            computed: {
-                sensorCards() {
-                    return this.sensorOrder.map((key) => this.sensors[key]);
-                },
-            },
-            methods: {
-                normalizeSensorKey(raw) {
-                    return String(raw || "")
-                        .replace(/^sensor[-_]/, "")
-                        .replace(/-/g, "_");
-                },
-                toTitle(key) {
-                    return key
-                        .replace(/_/g, " ")
-                        .replace(/\b\w/g, (c) => c.toUpperCase());
-                },
-                readingFor(payload, sensorKey) {
-                    const altKey = "sensor-" + sensorKey.replace(/_/g, "-");
-                    return payload[sensorKey] ?? payload[altKey] ?? null;
-                },
-                classify(sensor, value) {
-                    const t = this.thresholds[sensor];
-                    if (
-                        !t ||
-                        value === null ||
-                        value === undefined ||
-                        Number.isNaN(Number(value))
-                    ) {
-                        return "normal";
-                    }
-                    if (Number(value) >= t.critical) return "critical";
-                    if (Number(value) >= t.warn) return "warning";
-                    return "normal";
-                },
-                statusLabel(level) {
-                    if (level === "critical") return "Critical";
-                    if (level === "warning") return "Warning";
-                    return "Normal";
-                },
-                statusPillClass(level) {
-                    if (level === "critical") return "bg-rose-500/15 text-rose-300";
-                    if (level === "warning") return "bg-amber-500/15 text-amber-300";
-                    return "bg-emerald-500/15 text-emerald-300";
-                },
-                readingClass(level) {
-                    if (level === "critical") return "text-rose-300";
-                    if (level === "warning") return "text-amber-300";
-                    return "text-sky-300";
-                },
-                formatNumber(value, decimals = 1) {
-                    if (
-                        value === null ||
-                        value === undefined ||
-                        Number.isNaN(Number(value))
-                    ) {
-                        return "-";
-                    }
-                    return Number(value).toFixed(decimals);
-                },
-                resetSensorsMeta() {
-                    for (const key of this.sensorOrder) {
-                        this.sensors[key].pods = 0;
-                        this.sensors[key].ips = [];
-                    }
-                },
-                applyStatus(statusPayload) {
-                    this.totalPods = Number(statusPayload.total_pods || 0);
-                    this.resetSensorsMeta();
+            setup() {
+                const tab = ref('demo');
+                const connected = ref(false);
+                const lastUpdate = ref('—');
+                const readings = ref({ temperature: null, humidity: null, energy: null, co2: null, pm25: null });
+                const grafanaUrl = ref('http://' + window.location.hostname + ':30030');
+                let demoTimer = null;
 
-                    const rows = [];
-                    for (const [rawKey, info] of Object.entries(
-                        statusPayload.sensors || {},
-                    )) {
-                        const key = this.normalizeSensorKey(rawKey);
-                        const pods = Number(info?.pods || 0);
-                        const ips = Array.isArray(info?.ips) ? info.ips : [];
-
-                        if (this.sensors[key]) {
-                            this.sensors[key].pods = pods;
-                            this.sensors[key].ips = ips;
-                        }
-
-                        rows.push({ key, name: this.toTitle(key), pods, ips });
-                    }
-
-                    rows.sort(
-                        (a, b) =>
-                            this.sensorOrder.indexOf(a.key) -
-                            this.sensorOrder.indexOf(b.key),
-                    );
-
-                    for (const row of rows) {
-                        const label = "sensor-" + row.key.replace(/_/g, "-");
-                        const sd = this.scalerData[label];
-                        row.avgCpu = sd ? sd.smoothed_cpu : null;
-                        row.perPodCpu = sd && Array.isArray(sd.per_pod) ? sd.per_pod : [];
-                    }
-
-                    this.podRows = rows;
-                },
-                applyReadings(readingsPayload) {
-                    const temperature = this.readingFor(readingsPayload, "temperature");
-                    if (temperature && this.sensors.temperature) {
-                        const value = temperature.value;
-                        this.sensors.temperature.value = value;
-                        this.sensors.temperature.status = this.classify(
-                            "temperature",
-                            value,
-                        );
-                    }
-
-                    const humidity = this.readingFor(readingsPayload, "humidity");
-                    if (humidity && this.sensors.humidity) {
-                        const value = humidity.value;
-                        this.sensors.humidity.value = value;
-                        this.sensors.humidity.status = this.classify("humidity", value);
-                    }
-
-                    const energy = this.readingFor(readingsPayload, "energy");
-                    if (energy && this.sensors.energy) {
-                        const value = energy.value;
-                        this.sensors.energy.value = value;
-                        this.sensors.energy.status = this.classify("energy", value);
-                    }
-
-                    const airQuality = this.readingFor(readingsPayload, "air_quality");
-                    if (airQuality && this.sensors.air_quality) {
-                        const co2 = airQuality.co2_ppm;
-                        const pm25 = airQuality.pm25;
-                        this.sensors.air_quality.co2 = co2;
-                        this.sensors.air_quality.pm25 = pm25;
-                        this.sensors.air_quality.status = this.classify(
-                            "air_quality",
-                            co2,
-                        );
-                    }
-                },
-                async refresh() {
+                async function fetchDemo() {
                     try {
-                        const [statusResp, readingsResp, scalerResp] = await Promise.all([
-                            fetch("/api/status"),
-                            fetch("/api/readings"),
-                            fetch("/api/scaler-status"),
-                        ]);
-
-                        if (!statusResp.ok)
-                            throw new Error("/api/status returned " + statusResp.status);
-                        if (!readingsResp.ok)
-                            throw new Error(
-                                "/api/readings returned " + readingsResp.status,
-                            );
-
-                        const statusPayload = await statusResp.json();
-                        const readingsPayload = await readingsResp.json();
-
-                        if (scalerResp.ok) {
-                            this.scalerData = await scalerResp.json();
+                        const readingsRes = await fetch('/api/readings').then(r => r.json());
+                        for (const r of Object.values(readingsRes)) {
+                            if (!r) continue;
+                            if (r.type === 'temperature') readings.value.temperature = r.value;
+                            else if (r.type === 'humidity') readings.value.humidity = r.value;
+                            else if (r.type === 'energy') readings.value.energy = r.value;
+                            else if (r.type === 'air_quality') {
+                                readings.value.co2 = r.co2_ppm;
+                                readings.value.pm25 = r.pm25;
+                            }
                         }
-
-                        this.applyStatus(statusPayload);
-                        this.applyReadings(readingsPayload);
-
-                        this.healthy = true;
-                        this.errorMessage = "";
-                        this.lastUpdate = new Date().toLocaleTimeString();
-                    } catch (err) {
-                        this.healthy = false;
-                        this.errorMessage = String(err);
+                        connected.value = true;
+                        lastUpdate.value = new Date().toLocaleTimeString();
+                    } catch {
+                        connected.value = false;
                     }
-                },
-            },
-            mounted() {
-                this.refresh();
-                this.refreshTimer = setInterval(this.refresh, 1000);
-            },
-            beforeUnmount() {
-                if (this.refreshTimer) {
-                    clearInterval(this.refreshTimer);
-                    this.refreshTimer = null;
                 }
-            },
-        }).mount("#app");
+
+                const thresholds = {
+                    temperature: { warn: 24, crit: 27 },
+                    humidity: { warn: 60, crit: 75 },
+                    energy: { warn: 8, crit: 12 },
+                    air_quality: { warn: 1000, crit: 1500 },
+                };
+
+                function getVal(type) {
+                    if (type === 'temperature') return readings.value.temperature;
+                    if (type === 'humidity') return readings.value.humidity;
+                    if (type === 'energy') return readings.value.energy;
+                    if (type === 'air_quality') return readings.value.co2;
+                    return null;
+                }
+
+                function statusClass(type) {
+                    const val = getVal(type);
+                    if (val === null) return 'bg-slate-700 text-slate-400';
+                    const t = thresholds[type];
+                    if (val >= t.crit) return 'status-critical';
+                    if (val >= t.warn) return 'status-warning';
+                    return 'status-normal';
+                }
+
+                function statusLabel(type) {
+                    const val = getVal(type);
+                    if (val === null) return 'Unknown';
+                    const t = thresholds[type];
+                    if (val >= t.crit) return 'Critical';
+                    if (val >= t.warn) return 'Warning';
+                    return 'Normal';
+                }
+
+                // ---- Stress test ----
+                const stressTarget = ref('sensor-temperature');
+                const stressWorkers = ref(8);
+                const stressDuration = ref(60);
+                const running = ref(false);
+                const stressSent = ref(0);
+                const stressErrors = ref(0);
+                const stressRps = ref(0);
+                const stressLog = ref([]);
+                const stressElapsed = ref(0);
+                const logBox = ref(null);
+
+                let stopFlag = false;
+                let workerAborts = [];
+                let rpsInterval = null;
+                let elapsedInterval = null;
+                let sentSnapshot = 0;
+                let startTime = 0;
+
+                function log(msg, type = 'info') {
+                    stressLog.value.push({ msg, type });
+                    if (stressLog.value.length > 200) stressLog.value.shift();
+                    nextTick(() => { if (logBox.value) logBox.value.scrollTop = logBox.value.scrollHeight; });
+                }
+
+                async function workerLoop(url, signal) {
+                    while (!stopFlag) {
+                        try {
+                            const res = await fetch(url, { signal });
+                            if (res.ok) stressSent.value++;
+                            else stressErrors.value++;
+                        } catch (e) {
+                            if (stopFlag) break;
+                            stressErrors.value++;
+                        }
+                    }
+                }
+
+                function startStress() {
+                    if (running.value) return;
+                    stopFlag = false;
+                    stressSent.value = 0;
+                    stressErrors.value = 0;
+                    stressRps.value = 0;
+                    stressElapsed.value = 0;
+                    stressLog.value = [];
+                    workerAborts = [];
+
+                    const url = '/' + stressTarget.value + '/sensor/reading';
+                    running.value = true;
+                    startTime = Date.now();
+                    sentSnapshot = 0;
+
+                    log('Starting ' + stressWorkers.value + ' workers -> ' + url + '  (' + stressDuration.value + 's)');
+
+                    for (let i = 0; i < stressWorkers.value; i++) {
+                        const ctrl = new AbortController();
+                        workerAborts.push(ctrl);
+                        workerLoop(url, ctrl.signal);
+                    }
+
+                    rpsInterval = setInterval(() => {
+                        const delta = stressSent.value - sentSnapshot;
+                        sentSnapshot = stressSent.value;
+                        stressRps.value = delta;
+                    }, 1000);
+
+                    elapsedInterval = setInterval(() => {
+                        stressElapsed.value = Math.floor((Date.now() - startTime) / 1000);
+                        if (stressElapsed.value >= stressDuration.value) stopStress();
+                    }, 500);
+                }
+
+                function stopStress() {
+                    if (!running.value) return;
+                    stopFlag = true;
+                    workerAborts.forEach(c => c.abort());
+                    workerAborts = [];
+                    clearInterval(rpsInterval);
+                    clearInterval(elapsedInterval);
+                    running.value = false;
+                    log('Stopped. Total sent: ' + stressSent.value + ', errors: ' + stressErrors.value, 'success');
+                }
+
+                onMounted(() => {
+                    fetchDemo();
+                    demoTimer = setInterval(fetchDemo, 2000);
+                });
+
+                onUnmounted(() => {
+                    clearInterval(demoTimer);
+                    stopStress();
+                });
+
+                return {
+                    tab, connected, lastUpdate, readings, grafanaUrl,
+                    statusClass, statusLabel,
+                    stressTarget, stressWorkers, stressDuration, running,
+                    stressSent, stressErrors, stressRps, stressLog, stressElapsed, logBox,
+                    startStress, stopStress,
+                };
+            }
+        }).mount('#app');
     </script>
 </body>
 

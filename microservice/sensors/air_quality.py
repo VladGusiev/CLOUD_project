@@ -1,3 +1,4 @@
+import math
 import random
 from prometheus_client import Gauge
 from base_app import create_app
@@ -9,6 +10,8 @@ app = create_app(title="Sensor - Air Quality")
 
 @app.get("/sensor/reading")
 def reading():
+    # Lightweight CPU work so flood requests produce measurable load
+    sum(math.sqrt(i) * math.log(i + 1) for i in range(1, 50001))
     co2 = round(random.uniform(400.0, 2000.0), 1)
     pm25 = round(random.uniform(5.0, 150.0), 1)
     sensor_co2_ppm.set(co2)
