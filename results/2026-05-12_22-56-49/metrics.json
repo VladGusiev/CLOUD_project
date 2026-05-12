@@ -1,0 +1,1622 @@
+[
+  {
+    "ts": "2026-05-12T20:56:49.585221+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 3.8,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 3.8
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:49.585221+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 9.6,
+    "smoothed_cpu": 3.2,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 9.6
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:49.585221+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 8.0,
+    "smoothed_cpu": 2.7,
+    "cooldown_remaining": 4.8,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 8.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:49.585221+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 8.0,
+    "smoothed_cpu": 3.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 8.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:54.930431+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 2.6,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:54.930431+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 4.5,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:54.930431+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 4.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:56:54.930431+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 3.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:00.200593+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 2.6,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:00.200593+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 4.5,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:00.200593+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 4.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:00.200593+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 3.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:05.371538+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 2.6,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:05.371538+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 5.2,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:05.371538+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 4.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:05.371538+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 97.0,
+    "smoothed_cpu": 35.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 97.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:10.519587+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 2.6,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:10.519587+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 5.2,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:10.519587+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 4.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:10.519587+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 97.0,
+    "smoothed_cpu": 35.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 97.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:15.724229+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:15.724229+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 3.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:15.724229+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 2.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:15.724229+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 100.0,
+    "smoothed_cpu": 65.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 100.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:20.884572+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:20.884572+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 3.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:20.884572+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 2.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:20.884572+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 100.0,
+    "smoothed_cpu": 65.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 100.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:26.111778+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:26.111778+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 2.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:26.111778+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:26.111778+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 99.6,
+    "smoothed_cpu": 98.9,
+    "cooldown_remaining": 40.5,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 99.6
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:31.298740+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:31.298740+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 2.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:31.298740+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:31.298740+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 99.6,
+    "smoothed_cpu": 98.9,
+    "cooldown_remaining": 35.3,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 99.6
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:36.496791+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:36.496791+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 2.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:36.496791+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:36.496791+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 45.9,
+    "smoothed_cpu": 81.8,
+    "cooldown_remaining": 30.2,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 43.8
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 48.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:41.692175+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:41.692175+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 2.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:41.692175+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:41.692175+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 45.9,
+    "smoothed_cpu": 81.8,
+    "cooldown_remaining": 25.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 43.8
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 48.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:46.870671+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:46.870671+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:46.870671+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:46.870671+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 49.0,
+    "smoothed_cpu": 64.8,
+    "cooldown_remaining": 19.8,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 48.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 50.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:52.110774+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:52.110774+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:52.110774+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:52.110774+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 45.9,
+    "smoothed_cpu": 46.9,
+    "cooldown_remaining": 14.5,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 45.8
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 46.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:57.382648+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:57.382648+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:57.382648+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:57:57.382648+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 45.9,
+    "smoothed_cpu": 46.9,
+    "cooldown_remaining": 9.2,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 45.8
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 46.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:02.691075+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:02.691075+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:02.691075+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:02.691075+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 43.9,
+    "smoothed_cpu": 46.3,
+    "cooldown_remaining": 3.8,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 41.8
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 46.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:07.987012+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:07.987012+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:07.987012+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:07.987012+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 43.9,
+    "smoothed_cpu": 46.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 41.8
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 46.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:13.194462+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:13.194462+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:13.194462+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:13.194462+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 44.9,
+    "smoothed_cpu": 44.9,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 42.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 47.8
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:18.478990+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:18.478990+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:18.478990+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:18.478990+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 44.9,
+    "smoothed_cpu": 44.9,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 42.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 47.8
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:23.695689+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:23.695689+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:23.695689+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:23.695689+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 10.0,
+    "smoothed_cpu": 32.9,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 18.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:28.903924+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:28.903924+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:28.903924+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 4.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 4.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:28.903924+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 10.0,
+    "smoothed_cpu": 32.9,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 18.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:34.108635+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:34.108635+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:34.108635+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:34.108635+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 18.3,
+    "cooldown_remaining": 43.5,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 0.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:39.336827+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:39.336827+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:39.336827+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:39.336827+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 2,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 18.3,
+    "cooldown_remaining": 38.3,
+    "per_pod": [
+      {
+        "ip": "10.244.0.17",
+        "cpu": 0.0
+      },
+      {
+        "ip": "10.244.0.7",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:44.539756+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:44.539756+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:44.539756+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:44.539756+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 4.0,
+    "cooldown_remaining": 33.1,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:49.744732+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:49.744732+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:49.744732+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:49.744732+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 4.0,
+    "cooldown_remaining": 27.7,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:55.299252+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:55.299252+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:55.299252+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:58:55.299252+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 22.3,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:00.485048+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:00.485048+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:00.485048+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:00.485048+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.7,
+    "cooldown_remaining": 17.1,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:05.699990+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:05.699990+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:05.699990+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:05.699990+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 11.9,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 2.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:10.924660+00:00",
+    "sensor": "sensor-temperature",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.3",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:10.924660+00:00",
+    "sensor": "sensor-humidity",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.5",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:10.924660+00:00",
+    "sensor": "sensor-energy",
+    "replicas": 1,
+    "avg_cpu": 0.0,
+    "smoothed_cpu": 0.0,
+    "cooldown_remaining": 0.0,
+    "per_pod": [
+      {
+        "ip": "10.244.0.4",
+        "cpu": 0.0
+      }
+    ]
+  },
+  {
+    "ts": "2026-05-12T20:59:10.924660+00:00",
+    "sensor": "sensor-air-quality",
+    "replicas": 1,
+    "avg_cpu": 2.0,
+    "smoothed_cpu": 1.3,
+    "cooldown_remaining": 6.7,
+    "per_pod": [
+      {
+        "ip": "10.244.0.7",
+        "cpu": 2.0
+      }
+    ]
+  }
+]
