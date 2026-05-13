@@ -108,6 +108,25 @@ def create_app(lb: RoundRobinLB) -> FastAPI:
             logger.warning("[LB] scaler-status fetch failed: %s", exc)
             return JSONResponse({"error": "scaler unreachable"}, status_code=502)
 
+    @app.api_route("/api/scaler-config", methods=["GET", "PATCH"])
+    async def api_scaler_config(request: Request):
+        try:
+            async with httpx.AsyncClient(timeout=3.0) as client:
+                if request.method == "PATCH":
+                    body = await request.body()
+                    resp = await client.patch(
+                        f"{SCALER_URL}/config",
+                        content=body,
+                        headers={"content-type": "application/json"},
+                    )
+                else:
+                    resp = await client.get(f"{SCALER_URL}/config")
+                resp.raise_for_status()
+                return resp.json()
+        except Exception as exc:
+            logger.warning("[LB] scaler-config %s failed: %s", request.method, exc)
+            return JSONResponse({"error": "scaler unreachable"}, status_code=502)
+
     @app.api_route("/{service}/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])
     async def proxy(service: str, path: str, request: Request):
         """Route to a specific service's pods: /{sensor-label}/{endpoint}."""

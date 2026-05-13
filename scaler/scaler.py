@@ -162,6 +162,12 @@ class ScalerManager:
             }
         return result
 
+    def rebuild_windows(self) -> None:
+        self._windows = {
+            label: MetricWindow(size=self.config.metric_window_size)
+            for label in self.app_labels
+        }
+
     async def run_loop(self) -> None:
         logger.info(
             "[scaler] Starting main loop — labels=%s, thresholds=%.0f%%/%.0f%%, "

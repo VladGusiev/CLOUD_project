@@ -7,9 +7,20 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import Response
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+from pydantic import BaseModel
 
 from k8s_client import K8sScalerClient
 from scaler import ScalerConfig, ScalerManager
+
+
+class ScalerConfigPatch(BaseModel):
+    scale_up_threshold: float | None = None
+    scale_down_threshold: float | None = None
+    min_replicas: int | None = None
+    max_replicas: int | None = None
+    cooldown_seconds: float | None = None
+    eval_interval_seconds: float | None = None
+    metric_window_size: int | None = None
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(
@@ -47,6 +58,41 @@ def _create_api(manager: ScalerManager) -> FastAPI:
     @api.get("/metrics")
     def metrics():
         return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+    @api.get("/config")
+    async def get_config():
+        c = manager.config
+        return {
+            "scale_up_threshold": c.scale_up_threshold,
+            "scale_down_threshold": c.scale_down_threshold,
+            "min_replicas": c.min_replicas,
+            "max_replicas": c.max_replicas,
+            "cooldown_seconds": c.cooldown_seconds,
+            "eval_interval_seconds": c.eval_interval_seconds,
+            "metric_window_size": c.metric_window_size,
+        }
+
+    @api.patch("/config")
+    async def patch_config(patch: ScalerConfigPatch):
+        updated = {}
+        for field, value in patch.model_dump(exclude_none=True).items():
+            setattr(manager.config, field, value)
+            updated[field] = value
+        if "metric_window_size" in updated:
+            manager.rebuild_windows()
+        c = manager.config
+        return {
+            "updated": updated,
+            "config": {
+                "scale_up_threshold": c.scale_up_threshold,
+                "scale_down_threshold": c.scale_down_threshold,
+                "min_replicas": c.min_replicas,
+                "max_replicas": c.max_replicas,
+                "cooldown_seconds": c.cooldown_seconds,
+                "eval_interval_seconds": c.eval_interval_seconds,
+                "metric_window_size": c.metric_window_size,
+            },
+        }
 
     return api
 

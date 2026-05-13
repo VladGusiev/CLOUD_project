@@ -112,6 +112,8 @@
                 <button class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
                     :class="tab === 'stress' ? 'tab-active' : 'tab-inactive'" @click="tab = 'stress'">Stress
                     Test</button>
+                <button class="px-4 py-2 rounded-md text-sm font-medium transition-colors"
+                    :class="tab === 'control' ? 'tab-active' : 'tab-inactive'" @click="tab = 'control'">Scaler Config</button>
             </div>
             <span class="text-xs text-slate-500">{{ lastUpdate }}</span>
         </div>
@@ -283,9 +285,47 @@
             </div>
         </div>
 
+    <!-- ===== CONTROL TAB ===== -->
+    <div v-if="tab === 'control'" class="p-6 max-w-2xl mx-auto">
+        <div class="card rounded-xl p-6">
+            <h2 class="text-lg font-semibold text-white mb-1">Scaler Config</h2>
+            <p class="text-slate-400 text-sm mb-5">Leave a field empty to keep its current value.</p>
+
+            <div class="space-y-3">
+                <div v-for="field in configFields" :key="field.key" class="flex items-center gap-3">
+                    <div class="flex-1">
+                        <p class="text-white text-sm font-medium">{{ field.label }}</p>
+                        <p class="text-slate-500 text-xs">current: <span class="text-slate-400">{{ configCurrent[field.key] != null ? configCurrent[field.key] : '—' }}</span></p>
+                    </div>
+                    <input type="number" v-model="configForm[field.key]"
+                        :placeholder="configCurrent[field.key] != null ? String(configCurrent[field.key]) : ''"
+                        :step="field.step" :min="field.min"
+                        class="w-28 rounded-lg px-3 py-2 text-sm border border-slate-600 bg-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
+                    <span class="text-slate-500 text-xs w-14 text-right">{{ field.unit }}</span>
+                </div>
+            </div>
+
+            <div v-if="configMsg" class="mt-4 rounded-lg px-4 py-2 text-sm font-medium"
+                :class="configMsg.ok ? 'bg-green-900 text-green-300' : 'bg-red-900 text-red-300'">
+                {{ configMsg.text }}
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button @click="loadConfig"
+                    class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium transition-colors">
+                    Refresh
+                </button>
+                <button @click="saveConfig" :disabled="configSaving"
+                    class="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-semibold py-2 rounded-lg transition-colors">
+                    {{ configSaving ? 'Applying...' : 'Apply Changes' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
     </div>
     <script>
-        const { createApp, ref, onMounted, onUnmounted, nextTick } = Vue;
+        const { createApp, ref, watch, onMounted, onUnmounted, nextTick } = Vue;
 
         createApp({
             setup() {
@@ -433,6 +473,81 @@
                     log('Stopped. Total sent: ' + stressSent.value + ', errors: ' + stressErrors.value, 'success');
                 }
 
+                // ---- Config control panel ----
+                const configCurrent = ref({});
+                const configForm = ref({
+                    scale_up_threshold: '',
+                    scale_down_threshold: '',
+                    min_replicas: '',
+                    max_replicas: '',
+                    cooldown_seconds: '',
+                    eval_interval_seconds: '',
+                    metric_window_size: '',
+                });
+                const configSaving = ref(false);
+                const configMsg = ref(null);
+
+                const configFields = [
+                    { key: 'scale_up_threshold',  label: 'Scale Up Threshold',  unit: '%',       step: '1', min: '0' },
+                    { key: 'scale_down_threshold', label: 'Scale Down Threshold', unit: '%',      step: '1', min: '0' },
+                    { key: 'min_replicas',         label: 'Min Replicas',         unit: 'pods',   step: '1', min: '1' },
+                    { key: 'max_replicas',         label: 'Max Replicas',         unit: 'pods',   step: '1', min: '1' },
+                    { key: 'cooldown_seconds',     label: 'Cooldown',             unit: 's',      step: '5', min: '0' },
+                    { key: 'eval_interval_seconds',label: 'Eval Interval',        unit: 's',      step: '1', min: '1' },
+                    { key: 'metric_window_size',   label: 'Window Size',          unit: 'samples',step: '1', min: '1' },
+                ];
+
+                async function loadConfig() {
+                    try {
+                        const data = await fetch('/api/scaler-config').then(r => r.json());
+                        configCurrent.value = data;
+                        configMsg.value = null;
+                    } catch {
+                        configMsg.value = { text: 'Failed to load config', ok: false };
+                    }
+                }
+
+                async function saveConfig() {
+                    const patch = {};
+                    const form = configForm.value;
+                    if (form.scale_up_threshold !== '')   patch.scale_up_threshold   = parseFloat(form.scale_up_threshold);
+                    if (form.scale_down_threshold !== '') patch.scale_down_threshold  = parseFloat(form.scale_down_threshold);
+                    if (form.min_replicas !== '')         patch.min_replicas          = parseInt(form.min_replicas);
+                    if (form.max_replicas !== '')         patch.max_replicas          = parseInt(form.max_replicas);
+                    if (form.cooldown_seconds !== '')     patch.cooldown_seconds      = parseFloat(form.cooldown_seconds);
+                    if (form.eval_interval_seconds !== '') patch.eval_interval_seconds = parseFloat(form.eval_interval_seconds);
+                    if (form.metric_window_size !== '')   patch.metric_window_size    = parseInt(form.metric_window_size);
+
+                    if (Object.keys(patch).length === 0) {
+                        configMsg.value = { text: 'No fields to update — enter at least one value', ok: false };
+                        return;
+                    }
+
+                    configSaving.value = true;
+                    configMsg.value = null;
+                    try {
+                        const res = await fetch('/api/scaler-config', {
+                            method: 'PATCH',
+                            headers: { 'content-type': 'application/json' },
+                            body: JSON.stringify(patch),
+                        });
+                        const data = await res.json();
+                        if (res.ok) {
+                            configCurrent.value = data.config;
+                            configFields.forEach(f => configForm.value[f.key] = '');
+                            configMsg.value = { text: 'Updated: ' + Object.keys(data.updated).join(', '), ok: true };
+                        } else {
+                            configMsg.value = { text: data.error || 'Update failed', ok: false };
+                        }
+                    } catch {
+                        configMsg.value = { text: 'Request failed', ok: false };
+                    } finally {
+                        configSaving.value = false;
+                    }
+                }
+
+                watch(tab, (v) => { if (v === 'control') loadConfig(); });
+
                 onMounted(() => {
                     fetchDemo();
                     demoTimer = setInterval(fetchDemo, 2000);
@@ -449,6 +564,8 @@
                     stressTarget, stressWorkers, stressDuration, running,
                     stressSent, stressErrors, stressRps, stressLog, stressElapsed, logBox,
                     startStress, stopStress,
+                    configCurrent, configForm, configSaving, configMsg, configFields,
+                    loadConfig, saveConfig,
                 };
             }
         }).mount('#app');
