@@ -189,12 +189,12 @@ data:
           "refId": "A"
         },
         {
-          "expr": "70",
+          "expr": "scaler_config_scale_up_threshold",
           "legendFormat": "Scale-up threshold",
           "refId": "B"
         },
         {
-          "expr": "30",
+          "expr": "scaler_config_scale_down_threshold",
           "legendFormat": "Scale-down threshold",
           "refId": "C"
         }
@@ -322,6 +322,69 @@ data:
           "refId": "A"
         }
       ]
+    },
+    {
+      "id": 6,
+      "type": "row",
+      "title": "Scaler Configuration (live)",
+      "collapsed": false,
+      "gridPos": {"x": 0, "y": 24, "w": 24, "h": 1}
+    },
+    {
+      "id": 7, "type": "stat", "title": "Scale-Up Threshold",
+      "gridPos": {"x": 0, "y": 25, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percent", "color": {"mode": "fixed", "fixedColor": "red"}, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_scale_up_threshold", "refId": "A", "instant": true}]
+    },
+    {
+      "id": 8, "type": "stat", "title": "Scale-Down Threshold",
+      "gridPos": {"x": 6, "y": 25, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "percent", "color": {"mode": "fixed", "fixedColor": "green"}, "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_scale_down_threshold", "refId": "A", "instant": true}]
+    },
+    {
+      "id": 9, "type": "stat", "title": "Min Replicas",
+      "gridPos": {"x": 12, "y": 25, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}, "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_min_replicas", "refId": "A", "instant": true}]
+    },
+    {
+      "id": 10, "type": "stat", "title": "Max Replicas",
+      "gridPos": {"x": 18, "y": 25, "w": 6, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}, "thresholds": {"mode": "absolute", "steps": [{"color": "blue", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_max_replicas", "refId": "A", "instant": true}]
+    },
+    {
+      "id": 11, "type": "stat", "title": "Cooldown",
+      "gridPos": {"x": 0, "y": 29, "w": 8, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s", "color": {"mode": "fixed", "fixedColor": "orange"}, "thresholds": {"mode": "absolute", "steps": [{"color": "orange", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_cooldown_seconds", "refId": "A", "instant": true}]
+    },
+    {
+      "id": 12, "type": "stat", "title": "Eval Interval",
+      "gridPos": {"x": 8, "y": 29, "w": 8, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "s", "color": {"mode": "fixed", "fixedColor": "orange"}, "thresholds": {"mode": "absolute", "steps": [{"color": "orange", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_eval_interval_seconds", "refId": "A", "instant": true}]
+    },
+    {
+      "id": 13, "type": "stat", "title": "Window Size",
+      "gridPos": {"x": 16, "y": 29, "w": 8, "h": 4},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "purple"}, "thresholds": {"mode": "absolute", "steps": [{"color": "purple", "value": null}]}}},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}, "colorMode": "value", "graphMode": "none", "textMode": "auto"},
+      "targets": [{"expr": "scaler_config_metric_window_size", "refId": "A", "instant": true}]
     }
     ],
     "templating": {

@@ -10,7 +10,7 @@ from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from pydantic import BaseModel
 
 from k8s_client import K8sScalerClient
-from scaler import ScalerConfig, ScalerManager
+from scaler import ScalerConfig, ScalerManager, _sync_config_gauges
 
 
 class ScalerConfigPatch(BaseModel):
@@ -80,6 +80,7 @@ def _create_api(manager: ScalerManager) -> FastAPI:
             updated[field] = value
         if "metric_window_size" in updated:
             manager.rebuild_windows()
+        _sync_config_gauges(manager.config)
         c = manager.config
         return {
             "updated": updated,

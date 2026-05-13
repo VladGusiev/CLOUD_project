@@ -1,0 +1,230 @@
+<mxfile host="app.diagrams.net" version="21.0.0">
+  <diagram name="Sequence Diagram" id="sequence">
+    <mxGraphModel dx="1422" dy="762" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════
+             PARTICIPANTS
+        ═══════════════════════════════════════════════ -->
+
+        <mxCell id="p-browser" value="Browser" style="rounded=1;html=1;whiteSpace=wrap;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p-lb" value="Load Balancer" style="rounded=1;html=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="30" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p-sensor" value="Sensor Pod" style="rounded=1;html=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="30" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p-scaler" value="Scaler" style="rounded=1;html=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="750" y="30" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="p-k8s" value="K8s API" style="rounded=1;html=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="30" width="150" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════
+             LIFELINES  (center x: browser=100, lb=325, sensor=575, scaler=825, k8s=1075)
+        ═══════════════════════════════════════════════ -->
+
+        <mxCell id="ll-browser" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="80" as="sourcePoint" />
+            <mxPoint x="100" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ll-lb" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="80" as="sourcePoint" />
+            <mxPoint x="325" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ll-sensor" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="575" y="80" as="sourcePoint" />
+            <mxPoint x="575" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ll-scaler" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="825" y="80" as="sourcePoint" />
+            <mxPoint x="825" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ll-k8s" value="" style="endArrow=none;dashed=1;html=1;strokeColor=#999999;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1075" y="80" as="sourcePoint" />
+            <mxPoint x="1075" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 1 — Normal Request Flow
+        ═══════════════════════════════════════════════ -->
+
+        <mxCell id="sec1-header" value="1. Normal Request Flow" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="1190" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Browser → LB: request -->
+        <mxCell id="m1" value="GET /{sensor}/sensor/reading" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="155" as="sourcePoint" />
+            <mxPoint x="325" y="155" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LB → Sensor Pod: proxy to pod (round-robin pick) -->
+        <mxCell id="m2" value="GET /sensor/reading  (round-robin pick)" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="195" as="sourcePoint" />
+            <mxPoint x="575" y="195" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Sensor Pod → LB: reading response -->
+        <mxCell id="m3" value="{type, value, unit}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="575" y="235" as="sourcePoint" />
+            <mxPoint x="325" y="235" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LB → Browser: final response -->
+        <mxCell id="m4" value="200 OK  (X-Served-By: pod-ip)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="275" as="sourcePoint" />
+            <mxPoint x="100" y="275" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 2 — Auto-Scale Flow
+        ═══════════════════════════════════════════════ -->
+
+        <mxCell id="sec2-header" value="2. Auto-Scale Flow  (CPU threshold triggered)" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="315" width="1190" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Scaler → Sensor Pod: scrape metrics -->
+        <mxCell id="m5" value="GET /metrics  (every eval_interval=10s)" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="825" y="370" as="sourcePoint" />
+            <mxPoint x="575" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Sensor Pod → Scaler: metrics response -->
+        <mxCell id="m6" value="app_cpu_percent=85%" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="575" y="405" as="sourcePoint" />
+            <mxPoint x="825" y="405" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: scaler decision -->
+        <mxCell id="note-decision" value="window avg (83%) &gt; scale_up_threshold (70%)&#xa;cooldown check passes → scale up" style="shape=callout;html=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;perimeter=calloutPerimeter;size=15;position=0.1;direction=west;" vertex="1" parent="1">
+          <mxGeometry x="845" y="420" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Scaler → K8s API: patch scale -->
+        <mxCell id="m7" value="PATCH .../deployments/{name}/scale  {replicas: 3}" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="825" y="495" as="sourcePoint" />
+            <mxPoint x="1075" y="495" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- K8s API → Scaler: 200 OK -->
+        <mxCell id="m8" value="200 OK" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1075" y="530" as="sourcePoint" />
+            <mxPoint x="825" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: K8s creates new pod -->
+        <mxCell id="note-newpod" value="K8s schedules and starts new pod" style="shape=note;html=1;whiteSpace=wrap;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="960" y="548" width="230" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- LB → K8s API: list pods (pod_sync thread) -->
+        <mxCell id="m9" value="list pods  (pod_sync thread, every 5s)" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="605" as="sourcePoint" />
+            <mxPoint x="1075" y="605" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- K8s API → LB: updated pod list -->
+        <mxCell id="m10" value="[pod1-ip, pod2-ip, pod3-ip]" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1075" y="640" as="sourcePoint" />
+            <mxPoint x="325" y="640" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: LB updates round-robin pool -->
+        <mxCell id="note-lbupdate" value="LB updates round-robin pool&#xa;new pod now receives traffic" style="shape=callout;html=1;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;align=left;perimeter=calloutPerimeter;size=15;position=0.1;direction=east;" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="240" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════
+             SECTION 3 — Config Update Flow
+        ═══════════════════════════════════════════════ -->
+
+        <mxCell id="sec3-header" value="3. Config Update Flow  (live scaler reconfiguration)" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="715" width="1190" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Browser → LB: PATCH config -->
+        <mxCell id="m11" value="PATCH /api/scaler-config  {scale_up_threshold: 60}" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="100" y="770" as="sourcePoint" />
+            <mxPoint x="325" y="770" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LB → Scaler: proxy PATCH -->
+        <mxCell id="m12" value="PATCH /config  {scale_up_threshold: 60}" style="endArrow=block;endFill=1;html=1;fontSize=11;fontStyle=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="810" as="sourcePoint" />
+            <mxPoint x="825" y="810" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Note: scaler applies live -->
+        <mxCell id="note-liveconfig" value="setattr(config, 'scale_up_threshold', 60)&#xa;no restart required" style="shape=callout;html=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;align=left;perimeter=calloutPerimeter;size=15;position=0.1;direction=west;" vertex="1" parent="1">
+          <mxGeometry x="845" y="820" width="260" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Scaler → LB: config response -->
+        <mxCell id="m13" value="{updated: {scale_up_threshold: 60},  config: {...}}" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="825" y="885" as="sourcePoint" />
+            <mxPoint x="325" y="885" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- LB → Browser: final response -->
+        <mxCell id="m14" value="200 OK  (updated config)" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=11;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="325" y="930" as="sourcePoint" />
+            <mxPoint x="100" y="930" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

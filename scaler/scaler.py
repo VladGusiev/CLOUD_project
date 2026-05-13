@@ -19,7 +19,25 @@ _gauge_avg_ram = Gauge(
     "scaler_deployment_avg_ram", "Average RAM usage bytes per deployment", ["deployment"]
 )
 
+_gauge_cfg_scale_up   = Gauge("scaler_config_scale_up_threshold",   "Scale up CPU threshold (%)")
+_gauge_cfg_scale_down = Gauge("scaler_config_scale_down_threshold",  "Scale down CPU threshold (%)")
+_gauge_cfg_min_rep    = Gauge("scaler_config_min_replicas",          "Minimum replicas")
+_gauge_cfg_max_rep    = Gauge("scaler_config_max_replicas",          "Maximum replicas")
+_gauge_cfg_cooldown   = Gauge("scaler_config_cooldown_seconds",      "Cooldown period (s)")
+_gauge_cfg_interval   = Gauge("scaler_config_eval_interval_seconds", "Evaluation interval (s)")
+_gauge_cfg_window     = Gauge("scaler_config_metric_window_size",    "Metric sliding window size")
+
 logger = logging.getLogger("scaler.scaler")
+
+
+def _sync_config_gauges(config: "ScalerConfig") -> None:
+    _gauge_cfg_scale_up.set(config.scale_up_threshold)
+    _gauge_cfg_scale_down.set(config.scale_down_threshold)
+    _gauge_cfg_min_rep.set(config.min_replicas)
+    _gauge_cfg_max_rep.set(config.max_replicas)
+    _gauge_cfg_cooldown.set(config.cooldown_seconds)
+    _gauge_cfg_interval.set(config.eval_interval_seconds)
+    _gauge_cfg_window.set(config.metric_window_size)
 
 
 @dataclass
@@ -169,6 +187,7 @@ class ScalerManager:
         }
 
     async def run_loop(self) -> None:
+        _sync_config_gauges(self.config)
         logger.info(
             "[scaler] Starting main loop — labels=%s, thresholds=%.0f%%/%.0f%%, "
             "cooldown=%.0fs, interval=%.0fs, window=%d",

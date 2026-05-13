@@ -1,0 +1,59 @@
+sequenceDiagram
+    actor User
+    participant LB as Load Balancer (BE)
+    participant Pod as Sensor Pod<br/>(microservice)
+    participant K8s as K8s API
+    participant Scaler
+    participant Prometheus
+    participant Grafana
+
+    %% ── 1. User request flow ──────────────────────────────────────
+    User->>LB: GET /{sensor-label}/{endpoint}
+    LB->>LB: Pick next pod (round-robin)
+    LB->>Pod: GET http://{pod-ip}:8080/{endpoint}
+    Pod-->>LB: Sensor reading (JSON)
+    LB-->>User: Forwarded response
+
+    %% ── 2. Pod sync (background) ──────────────────────────────────
+    loop Every 5 s (pod sync thread)
+        LB->>K8s: List pods by label (namespace)
+        K8s-->>LB: Running pod IPs
+        LB->>LB: Update round-robin pool
+    end
+
+    %% ── 3. Prometheus scraping ────────────────────────────────────
+    loop Every 5 s (scrape_interval)
+        Prometheus->>Pod: GET /metrics (annotated pods)
+        Pod-->>Prometheus: app_cpu_percent, app_ram_bytes,<br/>app_active_requests, app_requests_total
+        Prometheus->>Scaler: GET /metrics (scaler-svc:8081)
+        Scaler-->>Prometheus: scaler_deployment_replicas,<br/>scaler_deployment_avg_cpu,<br/>scaler_deployment_avg_ram
+    end
+
+    %% ── 4. Scaler autoscaling loop ────────────────────────────────
+    loop Every 10 s (eval_interval)
+        Scaler->>Pod: GET http://{pod-ip}:8080/metrics (direct scrape)
+        Pod-->>Scaler: app_cpu_percent, app_ram_bytes
+        Scaler->>Scaler: Compute avg_cpu over sliding window
+        alt avg_cpu > 70 % and not in cooldown
+            Scaler->>K8s: PATCH deployments/scale (+1 replica)
+            K8s-->>Scaler: Updated replica count
+        else avg_cpu < 30 % and not in cooldown
+            Scaler->>K8s: PATCH deployments/scale (-1 replica)
+            K8s-->>Scaler: Updated replica count
+        end
+        Scaler->>Scaler: Update Prometheus gauges
+    end
+
+    %% ── 5. Grafana visualization ──────────────────────────────────
+    User->>Grafana: Open dashboard
+    Grafana->>Prometheus: PromQL queries
+    Prometheus-->>Grafana: Time-series data
+    Grafana-->>User: Rendered charts & panels
+
+    %% ── 6. LB dashboard & scaler config ──────────────────────────
+    User->>LB: GET /dashboard
+    LB-->>User: Vue.js dashboard (HTML)
+    User->>LB: GET /api/scaler-status
+    LB->>Scaler: GET /status (proxy)
+    Scaler-->>LB: Current replicas, cooldown, avg_cpu
+    LB-->>User: Scaler status JSON
